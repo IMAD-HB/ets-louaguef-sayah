@@ -2,8 +2,9 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
+  base: "/", // ✅ Ensures correct asset paths in production (Vercel)
   plugins: [tailwindcss(), react()],
   optimizeDeps: {
     include: ["jwt-decode"],
