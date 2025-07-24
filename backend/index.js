@@ -18,7 +18,7 @@ dotenv.config();
 // App setup
 const app = express();
 
-// Middleware
+// CORS setup
 const allowedOrigins = [
   "http://localhost:5173",
   "https://ets-louaguef-sayah.vercel.app",
@@ -38,12 +38,16 @@ app.use(
   })
 );
 
+// ✅ Missing middleware — add this:
+app.use(cookieParser());
+
 app.use(express.json());
+
 app.use(
   fileUpload({
     useTempFiles: true,
     tempFileDir: "/tmp/",
-    createParentPath: true, // optional for safer uploads
+    createParentPath: true,
   })
 );
 
