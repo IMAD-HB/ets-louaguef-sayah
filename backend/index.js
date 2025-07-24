@@ -19,7 +19,11 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const allowedOrigins = process.env.CLIENT_ORIGINS.split(",");
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://ets-louaguef-sayah.vercel.app",
+  "https://ets-louaguef-sayah-2koxqt1y4-habbi-imad-eddines-projects.vercel.app"
+];
 
 app.use(
   cors({
