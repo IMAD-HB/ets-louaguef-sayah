@@ -19,13 +19,21 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cookieParser());
+const allowedOrigins = process.env.CLIENT_ORIGINS.split(",");
+
 app.use(
   cors({
-    origin: process.env.CLIENT_ORIGIN || "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 app.use(express.json());
 app.use(
   fileUpload({
@@ -42,7 +50,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/admin", adminRoutes);
 
-// Optional: Health check route
+// Health check route
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "OK" });
 });
@@ -70,9 +78,4 @@ connectDB()
 // Keep-alive ping route for uptime monitoring
 app.get("/ping", (req, res) => {
   res.status(200).send("pong");
-});
-
-// Health check route
-app.get("/health", (req, res) => {
-  res.status(200).json({ status: "OK" });
 });
