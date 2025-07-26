@@ -96,14 +96,17 @@ const UserForm = () => {
 
       navigate("/admin/users");
     } catch (err) {
-      console.error("Error saving user:", err?.response?.data || err.message);
-      toast.error("حدث خطأ أثناء حفظ البيانات ❌");
+      const errorMsg =
+        err?.response?.data?.message || "حدث خطأ أثناء حفظ البيانات ❌";
+      toast.error(errorMsg);
     }
   };
 
   if (loading) {
     return (
-      <div className="p-4 text-center text-gray-600">جاري تحميل البيانات...</div>
+      <div className="p-4 text-center text-gray-600">
+        جاري تحميل البيانات...
+      </div>
     );
   }
 

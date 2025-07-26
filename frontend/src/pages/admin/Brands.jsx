@@ -92,7 +92,7 @@ const Brands = () => {
       />
 
       {/* Search */}
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-center mb-4">
         <input
           type="text"
           placeholder="🔍 ابحث عن علامة تجارية..."

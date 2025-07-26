@@ -7,6 +7,14 @@ const OrderCard = ({ order }) => {
       ? order.totalPrice - order.amountPaid
       : 0);
 
+  // ✅ Format date/time
+  const formattedDate = order.createdAt
+    ? new Date(order.createdAt).toLocaleString("ar-DZ", {
+        dateStyle: "medium",
+        timeStyle: "short",
+      })
+    : "غير متوفر";
+
   return (
     <div className="bg-white rounded-lg shadow p-4 flex flex-col gap-3">
       <div className="flex justify-between text-sm sm:text-base">
@@ -36,17 +44,11 @@ const OrderCard = ({ order }) => {
         </span>
       </div>
 
-      {order.receiptGenerated && (
-        <a
-          href={`/orders/${order._id}/receipt`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-3 text-sm text-blue-500 underline hover:text-blue-700"
-          aria-label={`تحميل إيصال الطلب رقم ${order._id}`}
-        >
-          تحميل الإيصال
-        </a>
-      )}
+      {/* ✅ Display order time */}
+      <div className="flex justify-between text-sm sm:text-base text-gray-500">
+        <span>تاريخ الطلب:</span>
+        <span>{formattedDate}</span>
+      </div>
     </div>
   );
 };

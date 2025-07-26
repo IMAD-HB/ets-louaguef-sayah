@@ -5,6 +5,7 @@ import { Select, SelectItem } from "../ui/select";
 import { pdf } from "@react-pdf/renderer";
 import OrderReceiptPDF from "./OrderReceiptPDF";
 import { saveAs } from "file-saver";
+import { toast } from "react-toastify";
 
 // Debounce util to prevent rapid PDF generation clicks
 const debounce = (fn, delay = 1000) => {
@@ -31,8 +32,10 @@ const OrderRow = ({ order, onStatusChange, onDelete }) => {
         setLoadingDownload(true);
         const blob = await pdf(<OrderReceiptPDF order={order} />).toBlob();
         saveAs(blob, `reçu-${order._id}.pdf`);
+        toast.success("تم تحميل الإيصال بنجاح ✅");
       } catch (err) {
         console.error("Failed to generate PDF for order:", order._id, err);
+        toast.error("حدث خطأ أثناء تحميل الإيصال ❌");
       } finally {
         setLoadingDownload(false);
       }
@@ -42,7 +45,9 @@ const OrderRow = ({ order, onStatusChange, onDelete }) => {
 
   return (
     <tr className="border-b hover:bg-gray-50 text-sm">
-      <td className="p-2 break-words max-w-[200px]">{order.user?.name || "—"}</td>
+      <td className="p-2 break-words max-w-[200px]">
+        {order.user?.name || "—"}
+      </td>
       <td className="p-2">{formatDate(order.createdAt)}</td>
       <td className="p-2 whitespace-nowrap">{order.totalPrice} د.ج</td>
       <td className="p-2 text-center whitespace-nowrap">
@@ -54,11 +59,10 @@ const OrderRow = ({ order, onStatusChange, onDelete }) => {
       </td>
       <td className="p-2 text-center min-w-[120px]">
         <Select value={status} onValueChange={handleStatusChange}>
-          {["Pending", "Confirmed", "Delivered", "Paid"].map((s) => (
-            <SelectItem key={s} value={s}>
-              {s}
-            </SelectItem>
-          ))}
+          <SelectItem value="Pending">قيد الانتظار</SelectItem>
+          <SelectItem value="Confirmed">تم التأكيد</SelectItem>
+          <SelectItem value="Delivered">تم التوصيل</SelectItem>
+          <SelectItem value="Paid">مدفوع</SelectItem>
         </Select>
       </td>
       <td className="p-2 text-center">

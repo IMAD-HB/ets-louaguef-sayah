@@ -20,8 +20,10 @@ const STATUS_COLORS = {
 };
 
 // Format helpers
-const fmtNumber = (n) => (typeof n === "number" ? `${n.toLocaleString("fr-DZ")} DZD` : "—");
-const fmtDate = (iso) => (iso ? new Date(iso).toLocaleDateString("fr-DZ") : "—");
+const fmtNumber = (n) =>
+  typeof n === "number" ? `${n.toLocaleString("fr-DZ")} DZD` : "—";
+const fmtDate = (iso) =>
+  iso ? new Date(iso).toLocaleDateString("fr-DZ") : "—";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -43,7 +45,13 @@ const Orders = () => {
     const fetchOrders = async () => {
       try {
         const { data } = await axios.get("/orders");
-        setOrders(data);
+
+        // ✅ Sort from oldest to newest
+        const sortedOrders = data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+
+        setOrders(sortedOrders);
       } catch {
         toast.error("فشل تحميل الطلبات");
       } finally {
@@ -82,7 +90,9 @@ const Orders = () => {
   const handleViewReceipt = async (orderId) => {
     try {
       const { data } = await axios.get(`/orders/${orderId}/receipt`);
-      const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
+      const blob = new Blob([JSON.stringify(data)], {
+        type: "application/json",
+      });
       const url = URL.createObjectURL(blob);
       window.open(url, "_blank");
     } catch {
@@ -95,7 +105,8 @@ const Orders = () => {
     .filter((order) => (filter === "All" ? true : order.status === filter))
     .filter((order) =>
       debouncedSearch
-        ? order.user?.name?.includes(debouncedSearch) || order._id?.includes(debouncedSearch)
+        ? order.user?.name?.includes(debouncedSearch) ||
+          order._id?.includes(debouncedSearch)
         : true
     );
 

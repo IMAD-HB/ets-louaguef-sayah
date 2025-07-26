@@ -97,23 +97,34 @@ const AdminDashboard = () => {
         remainingDebt,
       });
 
-      toast.success("تم إنشاء الطلب بنجاح");
+      toast.success("✅ تم إنشاء الطلب بنجاح");
       setForm({ user: "", items: [], amountPaid: "" });
       setSelectedClient(null);
     } catch (err) {
-      toast.error("فشل في إنشاء الطلب");
       console.error("❌ Order submission failed:", err);
+      toast.error("حدث خطأ أثناء إنشاء الطلب");
     }
   };
 
   return (
-    <div dir="rtl" className="min-h-screen bg-gray-100 font-[Cairo] p-4 space-y-8">
+    <div
+      dir="rtl"
+      className="min-h-screen bg-gray-100 font-[Cairo] p-4 space-y-8"
+    >
       <h1 className="text-2xl font-bold text-gray-800">لوحة التحكم</h1>
 
       {/* Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <SummaryCard title="عدد الزبائن" value={summary.clientCount} color="green" />
-        <SummaryCard title="عدد الطلبات" value={summary.orderCount} color="blue" />
+        <SummaryCard
+          title="عدد الزبائن"
+          value={summary.clientCount}
+          color="green"
+        />
+        <SummaryCard
+          title="عدد الطلبات"
+          value={summary.orderCount}
+          color="blue"
+        />
         <SummaryCard
           title="إجمالي الديون"
           value={`${summary.totalDebt.toLocaleString()} د.ج`}
@@ -123,7 +134,9 @@ const AdminDashboard = () => {
 
       {/* Order Form */}
       <div className="bg-white shadow-md rounded-xl p-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700">إنشاء طلب جديد</h2>
+        <h2 className="text-xl font-semibold mb-4 text-gray-700">
+          إنشاء طلب جديد
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Client Selector */}
           <div>
@@ -149,13 +162,18 @@ const AdminDashboard = () => {
 
           {/* Items Section */}
           {form.items.map((item, index) => (
-            <div key={index} className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end">
+            <div
+              key={index}
+              className="grid grid-cols-1 sm:grid-cols-12 gap-2 items-end"
+            >
               <div className="sm:col-span-5">
                 <label className="text-sm mb-1 block">المنتج</label>
                 <select
                   className="w-full border p-2 rounded"
                   value={item.product}
-                  onChange={(e) => handleItemChange(index, "product", e.target.value)}
+                  onChange={(e) =>
+                    handleItemChange(index, "product", e.target.value)
+                  }
                   required
                 >
                   <option value="">اختر المنتج</option>
@@ -174,7 +192,9 @@ const AdminDashboard = () => {
                   min="1"
                   className="w-full border p-2 rounded"
                   value={item.quantity}
-                  onChange={(e) => handleItemChange(index, "quantity", +e.target.value)}
+                  onChange={(e) =>
+                    handleItemChange(index, "quantity", +e.target.value)
+                  }
                   required
                 />
               </div>
@@ -209,12 +229,16 @@ const AdminDashboard = () => {
           {/* Payment & Total */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
             <div>
-              <label className="block text-sm font-medium mb-1">المبلغ المدفوع</label>
+              <label className="block text-sm font-medium mb-1">
+                المبلغ المدفوع
+              </label>
               <input
                 type="number"
                 className="w-full border p-2 rounded"
                 value={form.amountPaid}
-                onChange={(e) => setForm((prev) => ({ ...prev, amountPaid: e.target.value }))}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, amountPaid: e.target.value }))
+                }
                 required
               />
             </div>

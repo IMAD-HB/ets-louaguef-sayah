@@ -8,12 +8,21 @@ const UserDebtCard = ({ user, onSettle }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSettle = async () => {
-    const confirmed = window.confirm(`هل تريد تحديث المديونية إلى ${newDebt} د.ج؟`);
+    const parsedDebt = parseFloat(newDebt);
+
+    if (isNaN(parsedDebt) || parsedDebt < 0) {
+      toast.error("الرجاء إدخال مبلغ صالح (0 أو أكثر)");
+      return;
+    }
+
+    const confirmed = window.confirm(
+      `هل تريد تحديث المديونية إلى ${parsedDebt} د.ج؟`
+    );
     if (!confirmed || isSubmitting) return;
 
     try {
       setIsSubmitting(true);
-      await onSettle(user._id, parseFloat(newDebt));
+      await onSettle(user._id, parsedDebt);
       toast.success("✅ تم تحديث المديونية بنجاح");
     } catch (err) {
       toast.error("حدث خطأ أثناء تحديث المديونية");
@@ -35,7 +44,10 @@ const UserDebtCard = ({ user, onSettle }) => {
           </p>
 
           <div>
-            <label htmlFor={`debt-${user._id}`} className="text-sm font-medium block mb-1">
+            <label
+              htmlFor={`debt-${user._id}`}
+              className="text-sm font-medium block mb-1"
+            >
               المديونية (د.ج)
             </label>
             <input
@@ -43,7 +55,14 @@ const UserDebtCard = ({ user, onSettle }) => {
               type="number"
               min="0"
               value={newDebt}
-              onChange={(e) => setNewDebt(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "") {
+                  setNewDebt(""); // allow clearing input
+                } else if (!isNaN(value) && parseFloat(value) >= 0) {
+                  setNewDebt(value);
+                }
+              }}
               className="w-full p-2 border rounded-md text-sm focus:outline-none focus:ring focus:border-blue-300"
             />
           </div>

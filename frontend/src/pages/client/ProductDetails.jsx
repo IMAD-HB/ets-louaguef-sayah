@@ -45,6 +45,16 @@ const ProductDetails = () => {
   const handleAddToCart = () => {
     if (!product) return;
 
+    if (!product.price) {
+      toast.error("هذا المنتج غير متوفر حالياً");
+      return;
+    }
+
+    if (quantity <= 0) {
+      toast.error("الكمية يجب أن تكون 1 أو أكثر");
+      return;
+    }
+
     addToCart({
       _id: product._id,
       name: product.name,
@@ -53,7 +63,7 @@ const ProductDetails = () => {
       quantity,
     });
 
-    toast.success("✅ تمت الإضافة إلى السلة");
+    toast.success("✅ تمت الإضافة إلى السلة بنجاح");
   };
 
   if (!product) {
@@ -77,7 +87,9 @@ const ProductDetails = () => {
 
         <div className="flex flex-col gap-4">
           <h1 className="text-2xl font-bold text-gray-800">{product.name}</h1>
-          <p className="text-gray-600 whitespace-pre-wrap">{product.description}</p>
+          <p className="text-gray-600 whitespace-pre-wrap">
+            {product.description}
+          </p>
 
           <p className="text-lg font-semibold text-green-700">
             السعر:{" "}

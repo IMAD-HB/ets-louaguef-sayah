@@ -14,7 +14,13 @@ const OrderHistory = () => {
 
       try {
         const { data } = await axios.get("/orders/my");
-        setOrders(data);
+
+        // ✅ Sort orders from oldest to newest based on `createdAt`
+        const sortedOrders = data.sort(
+          (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+        );
+
+        setOrders(sortedOrders);
       } catch (error) {
         console.error("❌ خطأ في جلب الطلبات:", error);
       } finally {

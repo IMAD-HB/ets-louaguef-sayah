@@ -62,9 +62,19 @@ const OrderReceipt = () => {
           fileName={`receipt-${order._id}.pdf`}
         >
           {({ loading: pdfLoading }) => (
-            <Button className="w-full sm:w-auto" disabled={pdfLoading}>
-              {pdfLoading ? "📄 يتم تجهيز الإيصال..." : "⬇️ تحميل الإيصال PDF"}
-            </Button>
+            <div
+              onClick={() => {
+                if (!pdfLoading) {
+                  toast.success("✅ بدأ تحميل الإيصال");
+                }
+              }}
+            >
+              <Button className="w-full sm:w-auto" disabled={pdfLoading}>
+                {pdfLoading
+                  ? "📄 يتم تجهيز الإيصال..."
+                  : "⬇️ تحميل الإيصال PDF"}
+              </Button>
+            </div>
           )}
         </PDFDownloadLink>
       </div>
